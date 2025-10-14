@@ -1,0 +1,16 @@
+[package]
+name = "bogotolec/validator"
+license = "MIT"
+authors = ["bogotolec"]
+version = "0.1.0"
+
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+exclude = ["**"]
+include = ["src", "src/*.lua", "default.project.json", "wally.lock", "wally.toml"]
+
+[dependencies]
+
+[dev-dependencies]
+TestEZ = "roblox/testez@0.4.1"

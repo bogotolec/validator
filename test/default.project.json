@@ -1,0 +1,22 @@
+{
+	"name": "tests",
+  "tree": {
+    "$className": "DataModel",
+    "ServerScriptService": {
+      "$properties": {
+        "LoadStringEnabled": true
+      },
+      "Validator": {
+        "$path": "../src"
+      },
+      "DevPackages": {
+        "$path": "../DevPackages"
+      }
+    },
+    "TextChatService": {
+      "$properties": {
+        "ChatVersion": "TextChatService"
+      }
+    }
+  }
+}

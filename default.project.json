@@ -1,0 +1,7 @@
+{
+  "name": "Validator",
+  "globIgnorePaths": ["**.spec.luau"],
+  "tree": {
+    "$path": "src"
+  }
+}

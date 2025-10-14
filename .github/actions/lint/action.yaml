@@ -1,0 +1,20 @@
+name: lint
+
+inputs:
+  GITHUB_TOKEN:
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+  - name: Checkout Code
+    uses: actions/checkout@v4
+  
+  - name: Install aftman
+    uses: ok-nick/setup-aftman@v0.4.2
+    with:
+        token: ${{ inputs.GITHUB_TOKEN }}
+
+  - name: Lint
+    run: selene ./src
+    shell: bash
