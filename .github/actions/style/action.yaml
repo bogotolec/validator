@@ -1,0 +1,18 @@
+name: style
+
+inputs:
+  GITHUB_TOKEN:
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+  - name: Checkout Code
+    uses: actions/checkout@v4
+  
+  - name: StyLua
+    uses: JohnnyMorganz/stylua-action@v4
+    with:
+      token: ${{ inputs.GITHUB_TOKEN }}
+      version: 0.20.0
+      args: --check ./src

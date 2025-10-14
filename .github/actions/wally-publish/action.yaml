@@ -1,0 +1,26 @@
+name: wally-publish
+
+inputs:
+  GITHUB_TOKEN:
+    required: true
+  WALLY_TOKEN:
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+  - name: Checkout Code
+    uses: actions/checkout@v4
+
+  - name: Install aftman
+    uses: ok-nick/setup-aftman@v0.4.2
+    with:
+        token: ${{ inputs.GITHUB_TOKEN }}
+
+  - name: Wally login
+    run: wally login --token ${{ inputs.WALLY_TOKEN }}
+    shell: bash
+
+  - name: Publish
+    run: wally publish
+    shell: bash
