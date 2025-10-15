@@ -21,11 +21,23 @@ function CoreValidator.Check(self: ValidatorTypes.PrivateValidator, value: any):
 	for _, group in pairs(self._checksGroups) do
 		local passed = if next(group) then true else false
 
+		local isNegated = false
+
 		for _, check in pairs(group) do
-			if not check._func(value, table.unpack(check._params)) then
+			if not check then
+				isNegated = not isNegated
+				continue
+			end
+
+			assert(type(check) == "table", "Check is not table, which is not possible.")
+
+			local res = check._func(value, table.unpack(check._params))
+
+			if (isNegated and res) or (not isNegated and not res) then
 				passed = false
 				break
 			end
+			isNegated = false
 		end
 
 		if passed then

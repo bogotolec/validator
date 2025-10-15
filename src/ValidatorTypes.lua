@@ -1,13 +1,13 @@
 --!strict
 
-export type Check = {
+export type Check = false | {
 	_func: (any, ...any) -> boolean,
 	_params: typeof(table.pack(...)),
 }
 
 export type PublicValidator = typeof(setmetatable({}, {})) & {
 	Check: (self: PublicValidator, data: any) -> boolean,
-	Or: (self: PublicValidator) -> PublicRootValidator,
+	Or: PublicRootValidator,
 }
 export type PrivateValidator = PublicValidator & {
 	_checksGroups: { { Check } },
@@ -21,8 +21,11 @@ export type RootMethods = {
 export type PublicRootValidator = PublicValidator & RootMethods
 export type PrivateRootValidator = PublicRootValidator & PrivateValidator
 
-export type PublicNumberValidator = PublicValidator & {
-	IsGreater: (self: PublicNumberValidator, than: number) -> PublicNumberValidator,
+export type NumberValidatorMethods = {
+	IsGreater: (self: NumberValidatorMethods, than: number) -> PublicNumberValidator,
+}
+export type PublicNumberValidator = PublicValidator & NumberValidatorMethods & {
+	Not: NumberValidatorMethods,
 }
 export type PrivateNumberValidator = PublicNumberValidator & PrivateValidator
 

@@ -5,12 +5,12 @@ local CoreValidator = require(script.Parent.Core)
 local Helpers = require(script.Parent.Helpers)
 local ValidatorTypes = require(script.Parent.ValidatorTypes)
 
-local NumberValidator = {}
-setmetatable(NumberValidator, CoreValidator)
-NumberValidator.__index = NumberValidator
-
 export type PrivateValidator = ValidatorTypes.PrivateValidator
 export type PrivateNumberValidator = ValidatorTypes.PrivateNumberValidator
+
+local NumberValidator = {}
+setmetatable(NumberValidator, CoreValidator)
+NumberValidator.__index = Helpers.CreateIndex(NumberValidator)
 
 function NumberValidator.newIsNumber(): ValidatorTypes.PublicNumberValidator
 	local self = setmetatable(CoreValidator.new() :: any, NumberValidator)
