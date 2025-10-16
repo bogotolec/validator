@@ -1,6 +1,7 @@
 --!strict
 
 local BooleanValidator = require(script.Parent.Boolean)
+local InstanceValidator = require(script.Parent.Instance)
 local NanValidator = require(script.Parent.Nan)
 local NilValidator = require(script.Parent.Nil)
 local NumberValidator = require(script.Parent.Number)
@@ -15,5 +16,7 @@ RootValidator.IsNil = NilValidator.IsNil
 RootValidator.IsString = StringValidator.IsString
 RootValidator.IsBoolean = BooleanValidator.IsBoolean
 RootValidator.IsNan = NanValidator.IsNan
+RootValidator.IsAnInstance = InstanceValidator.IsAnInstance
+RootValidator.IsAnInstanceStrict = InstanceValidator.IsAnInstanceStrict
 
 return RootValidator

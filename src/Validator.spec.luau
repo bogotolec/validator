@@ -90,5 +90,18 @@ return function()
 			expect(validator:Check(0.5)).to.be.equal(true)
 			expect(validator:Check("0")).to.be.equal(false)
 		end)
+
+		it("04. Test instances", function()
+			local part = Instance.new("Part")
+			part.Parent = workspace
+
+			local validator = Validator.IsAnInstance("BasePart"):Freeze()
+			local validatorStrict = Validator.IsAnInstanceStrict("BasePart"):Freeze()
+
+			expect(validator:Check(part)).to.be.equal(true)
+			expect(validatorStrict:Check(part)).to.be.equal(false)
+
+			part:Destroy()
+		end)
 	end)
 end
