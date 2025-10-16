@@ -11,7 +11,7 @@ export type Checker = typeof(setmetatable({}, {})) & {
 }
 
 export type PublicValidator = Checker & {
-	Or: (self: PublicValidator) -> PublicRootValidator,
+	Or: (self: PublicValidator) -> RootMethods,
 	Freeze: (self: PublicValidator) -> Checker,
 }
 export type PrivateValidator = PublicValidator & {
@@ -19,10 +19,10 @@ export type PrivateValidator = PublicValidator & {
 }
 
 export type RootMethods = {
-	IsNumber: (self: PublicValidator) -> PublicNumberValidator,
-	IsInteger: (self: PublicValidator) -> PublicNumberValidator,
-	IsNil: (self: PublicValidator) -> PublicNilValidator,
-	IsString: (self: PublicValidator) -> PublicStringValidator,
+	IsNumber: (self: RootMethods) -> PublicNumberValidator,
+	IsInteger: (self: RootMethods) -> PublicNumberValidator,
+	IsNil: (self: RootMethods) -> PublicNilValidator,
+	IsString: (self: RootMethods) -> PublicStringValidator,
 }
 export type PublicRootValidator = PublicValidator & RootMethods
 export type PrivateRootValidator = PublicRootValidator & PrivateValidator
