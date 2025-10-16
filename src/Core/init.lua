@@ -48,6 +48,11 @@ function CoreValidator.Check(self: ValidatorTypes.PrivateValidator, value: any):
 	return false
 end
 
+function CoreValidator.Freeze(self: ValidatorTypes.PrivateValidator): ValidatorTypes.Checker
+	-- TODO add actual freeze (prohibit calling other methods)
+	return self
+end
+
 function CoreValidator.Or(
 	self: ValidatorTypes.PrivateValidator
 ): ValidatorTypes.PrivateRootValidator

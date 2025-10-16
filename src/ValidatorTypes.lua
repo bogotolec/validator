@@ -5,9 +5,13 @@ export type Check = false | {
 	_params: typeof(table.pack(...)),
 }
 
-export type PublicValidator = typeof(setmetatable({}, {})) & {
-	Check: (self: PublicValidator, data: any) -> boolean,
+export type Checker = typeof(setmetatable({}, {})) & {
+	Check: (self: Checker, data: any) -> boolean,
+}
+
+export type PublicValidator = Checker & {
 	Or: (self: PublicValidator) -> PublicRootValidator,
+	Freeze: (self: PublicValidator) -> Checker,
 }
 export type PrivateValidator = PublicValidator & {
 	_checksGroups: { { Check } },
