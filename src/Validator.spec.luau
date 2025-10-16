@@ -43,5 +43,21 @@ return function()
 			expect(validator:Check("0")).to.be.equal(true)
 			expect(validator:Check(nil)).to.be.equal(false)
 		end)
+
+		it("02. Test booleans", function()
+			local validator = Validator.IsBoolean():Freeze()
+
+			expect(validator:Check(true)).to.be.equal(true)
+			expect(validator:Check(false)).to.be.equal(true)
+			expect(validator:Check(0)).to.be.equal(false)
+			expect(validator:Check(nil)).to.be.equal(false)
+
+			validator = Validator.IsNumber():Or():IsBoolean():Freeze()
+
+			expect(validator:Check(true)).to.be.equal(true)
+			expect(validator:Check(false)).to.be.equal(true)
+			expect(validator:Check(0)).to.be.equal(true)
+			expect(validator:Check(nil)).to.be.equal(false)
+		end)
 	end)
 end
