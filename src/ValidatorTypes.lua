@@ -7,7 +7,7 @@ export type Check = false | {
 
 export type PublicValidator = typeof(setmetatable({}, {})) & {
 	Check: (self: PublicValidator, data: any) -> boolean,
-	Or: PublicRootValidator,
+	Or: (self: PublicValidator) -> PublicRootValidator,
 }
 export type PrivateValidator = PublicValidator & {
 	_checksGroups: { { Check } },
@@ -25,7 +25,7 @@ export type NumberValidatorMethods = {
 	IsGreater: (self: NumberValidatorMethods, than: number) -> PublicNumberValidator,
 }
 export type PublicNumberValidator = PublicValidator & NumberValidatorMethods & {
-	Not: NumberValidatorMethods,
+	Not: (self: PublicValidator) -> NumberValidatorMethods,
 }
 export type PrivateNumberValidator = PublicNumberValidator & PrivateValidator
 

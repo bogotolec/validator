@@ -5,7 +5,7 @@ local Validator = require(script.Parent)
 return function()
 	describe("Validator", function()
 		it("Should work", function()
-			local validator = Validator.IsInteger():IsGreater(5).Not:IsGreater(14).Or:IsNil()
+			local validator = Validator.IsInteger():IsGreater(5):Not():IsGreater(14):Or():IsNil()
 
 			expect(validator:Check(0)).to.be.equal(false)
 			expect(validator:Check(5)).to.be.equal(false)

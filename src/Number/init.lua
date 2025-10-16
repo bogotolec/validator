@@ -10,7 +10,7 @@ export type PrivateNumberValidator = ValidatorTypes.PrivateNumberValidator
 
 local NumberValidator = {}
 setmetatable(NumberValidator, CoreValidator)
-NumberValidator.__index = Helpers.CreateIndex(NumberValidator)
+NumberValidator.__index = NumberValidator
 
 function NumberValidator.newIsNumber(): ValidatorTypes.PublicNumberValidator
 	local self = setmetatable(CoreValidator.new() :: any, NumberValidator)

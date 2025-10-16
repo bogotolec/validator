@@ -56,6 +56,11 @@ function CoreValidator.Or(
 	return new
 end
 
+function CoreValidator.Not(self: ValidatorTypes.PrivateValidator): ValidatorTypes.PrivateValidator
+	table.insert(self._checksGroups[#self._checksGroups], false)
+	return self
+end
+
 function CoreValidator._Setup(rootValidator: ValidatorTypes.PrivateRootValidator)
 	rootValidatorClass = rootValidator
 end
