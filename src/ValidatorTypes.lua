@@ -7,6 +7,7 @@ export type Check = false | {
 
 export type Checker = typeof(setmetatable({}, {})) & {
 	Check: (self: Checker, data: any) -> boolean,
+	Assert: (self: Checker, data: any, message: string?) -> any,
 }
 
 export type PublicValidator = Checker & {

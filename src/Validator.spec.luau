@@ -14,6 +14,20 @@ return function()
 			expect(validator:Check(15)).to.be.equal(false)
 			expect(validator:Check(nil)).to.be.equal(true)
 			expect(validator:Check("10")).to.be.equal(false)
+
+			local success, value = pcall(function()
+				return validator:Assert(0, "Error")
+			end)
+
+			expect(success).to.be.equal(false)
+			expect(value).never.to.be.equal(0)
+
+			success, value = pcall(function()
+				return validator:Assert(10, "Error")
+			end)
+
+			expect(success).to.be.equal(true)
+			expect(value).to.be.equal(10)
 		end)
 	end)
 end

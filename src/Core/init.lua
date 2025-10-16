@@ -48,6 +48,18 @@ function CoreValidator.Check(self: ValidatorTypes.PrivateValidator, value: any):
 	return false
 end
 
+function CoreValidator.Assert(
+	self: ValidatorTypes.PrivateValidator,
+	value: any,
+	message: string?
+): any
+	if not self:Check(value) then
+		error(message or `Value {value} does not satisfy the validator checks.`)
+	end
+
+	return value
+end
+
 function CoreValidator.Freeze(self: ValidatorTypes.PrivateValidator): ValidatorTypes.Checker
 	-- TODO add actual freeze (prohibit calling other methods)
 	return self
