@@ -30,6 +30,7 @@ export type RootMethods = {
 	IsNil: (self: RootMethods) -> PublicNilValidator,
 	IsString: (self: RootMethods) -> PublicStringValidator,
 	IsBoolean: (self: RootMethods) -> PublicBooleanValidator,
+	IsNan: (self: RootMethods) -> PublicNanValidator,
 }
 export type PublicRootValidator = PublicValidator & RootMethods
 export type PrivateRootValidator = PublicRootValidator & PrivateValidator
@@ -69,6 +70,13 @@ export type PrivateStringValidator = PublicStringValidator & PrivateValidator
 
 export type PublicBooleanValidator = PublicValidator & {}
 export type PrivateBooleanValidator = PublicBooleanValidator & PrivateValidator
+
+--#endregion
+
+--#region Boolean
+
+export type PublicNanValidator = PublicValidator & {}
+export type PrivateNanValidator = PublicNanValidator & PrivateValidator
 
 --#endregion
 

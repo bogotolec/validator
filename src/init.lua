@@ -2,6 +2,7 @@
 
 local BooleanValidator = require(script.Boolean)
 local CoreValidator = require(script.Core)
+local NanValidator = require(script.Nan)
 local RootValidator = require(script.Root)
 local NilValidator = require(script.Nil)
 local NumberValidator = require(script.Number)
@@ -16,5 +17,6 @@ Validator.IsInteger = NumberValidator.newIsInteger
 Validator.IsNil = NilValidator.new
 Validator.IsString = StringValidator.new
 Validator.IsBoolean = BooleanValidator.new
+Validator.IsNan = NanValidator.new
 
 return Validator

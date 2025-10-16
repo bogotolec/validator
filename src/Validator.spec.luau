@@ -59,5 +59,36 @@ return function()
 			expect(validator:Check(0)).to.be.equal(true)
 			expect(validator:Check(nil)).to.be.equal(false)
 		end)
+
+		it("03. Test numbers and nans", function()
+			local nan = 0 / 0
+			local validator = Validator.IsNan():Freeze()
+
+			expect(validator:Check(nan)).to.be.equal(true)
+			expect(validator:Check(0)).to.be.equal(false)
+			expect(validator:Check(0.5)).to.be.equal(false)
+			expect(validator:Check("0")).to.be.equal(false)
+
+			validator = Validator.IsNumber():Freeze()
+
+			expect(validator:Check(nan)).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(true)
+			expect(validator:Check(0.5)).to.be.equal(true)
+			expect(validator:Check("0")).to.be.equal(false)
+
+			validator = Validator.IsInteger():Freeze()
+
+			expect(validator:Check(nan)).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(true)
+			expect(validator:Check(0.5)).to.be.equal(false)
+			expect(validator:Check("0")).to.be.equal(false)
+
+			validator = Validator.IsNumber():Or():IsNan():Freeze()
+
+			expect(validator:Check(nan)).to.be.equal(true)
+			expect(validator:Check(0)).to.be.equal(true)
+			expect(validator:Check(0.5)).to.be.equal(true)
+			expect(validator:Check("0")).to.be.equal(false)
+		end)
 	end)
 end

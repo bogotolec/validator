@@ -3,7 +3,7 @@
 local NumberChecks = {}
 
 function NumberChecks.IsNumber(value: any): boolean
-	return typeof(value) == "number"
+	return typeof(value) == "number" and value == value -- NaN check
 end
 
 function NumberChecks.IsInteger(value: any): boolean
