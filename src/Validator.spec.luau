@@ -4,7 +4,7 @@ local Validator = require(script.Parent)
 
 return function()
 	describe("Validator", function()
-		it("Should work", function()
+		it("00. Check if it works", function()
 			local validator =
 				Validator.IsInteger():IsGreater(5):Not():IsGreater(14):Or():IsNil():Freeze()
 
@@ -28,6 +28,20 @@ return function()
 
 			expect(success).to.be.equal(true)
 			expect(value).to.be.equal(10)
+		end)
+
+		it("01. Test strings", function()
+			local validator = Validator.IsString():Freeze()
+
+			expect(validator:Check(0)).to.be.equal(false)
+			expect(validator:Check("0")).to.be.equal(true)
+			expect(validator:Check(nil)).to.be.equal(false)
+
+			validator = Validator.IsNumber():Or():IsString():Freeze()
+
+			expect(validator:Check(0)).to.be.equal(true)
+			expect(validator:Check("0")).to.be.equal(true)
+			expect(validator:Check(nil)).to.be.equal(false)
 		end)
 	end)
 end

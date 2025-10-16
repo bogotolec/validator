@@ -22,6 +22,7 @@ export type RootMethods = {
 	IsNumber: (self: PublicValidator) -> PublicNumberValidator,
 	IsInteger: (self: PublicValidator) -> PublicNumberValidator,
 	IsNil: (self: PublicValidator) -> PublicNilValidator,
+	IsString: (self: PublicValidator) -> PublicStringValidator,
 }
 export type PublicRootValidator = PublicValidator & RootMethods
 export type PrivateRootValidator = PublicRootValidator & PrivateValidator
@@ -36,5 +37,13 @@ export type PrivateNumberValidator = PublicNumberValidator & PrivateValidator
 
 export type PublicNilValidator = PublicValidator & {}
 export type PrivateNilValidator = PublicNilValidator & PrivateValidator
+
+export type StringValidatorMethods = {
+	IsGreater: (self: NumberValidatorMethods, than: number) -> PublicNumberValidator,
+}
+export type PublicStringValidator = PublicValidator & StringValidatorMethods & {
+	Not: (self: PublicValidator) -> StringValidatorMethods,
+}
+export type PrivateStringValidator = PublicStringValidator & PrivateValidator
 
 return {}
