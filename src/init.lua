@@ -8,6 +8,7 @@ local RootValidator = require(script.Root)
 local NilValidator = require(script.Nil)
 local NumberValidator = require(script.Number)
 local StringValidator = require(script.String)
+local TableValidator = require(script.Table)
 
 local Validator = {}
 
@@ -21,5 +22,7 @@ Validator.IsBoolean = BooleanValidator.new
 Validator.IsNan = NanValidator.new
 Validator.IsAnInstance = InstanceValidator.newIsAnInstance
 Validator.IsAnInstanceStrict = InstanceValidator.newIsAnInstanceStrict
+Validator.IsTable = TableValidator.newIsTable
+Validator.IsTableStrict = TableValidator.newIsTableStrict
 
 return Validator

@@ -103,5 +103,83 @@ return function()
 
 			part:Destroy()
 		end)
+
+		it("05. Test tables", function()
+			local table1 = {
+				a = 10,
+			}
+			local table2 = {
+				a = 20,
+			}
+			local table3 = {
+				a = 10,
+				b = 20,
+			}
+
+			local validator = Validator.IsTable():Freeze()
+
+			expect(validator:Check(nil)).to.be.equal(false)
+			expect(validator:Check({})).to.be.equal(true)
+			expect(validator:Check(table1)).to.be.equal(true)
+			expect(validator:Check(table2)).to.be.equal(true)
+			expect(validator:Check(table3)).to.be.equal(true)
+			expect(validator:Check(0)).to.be.equal(false)
+
+			validator = Validator.IsTable({
+				a = Validator.IsInteger():IsGreater(15),
+			}):Freeze()
+
+			expect(validator:Check(nil)).to.be.equal(false)
+			expect(validator:Check({})).to.be.equal(false)
+			expect(validator:Check(table1)).to.be.equal(false)
+			expect(validator:Check(table2)).to.be.equal(true)
+			expect(validator:Check(table3)).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(false)
+
+			validator = Validator.IsTable({
+				a = Validator.IsInteger(),
+			}):Freeze()
+
+			expect(validator:Check(nil)).to.be.equal(false)
+			expect(validator:Check({})).to.be.equal(false)
+			expect(validator:Check(table1)).to.be.equal(true)
+			expect(validator:Check(table2)).to.be.equal(true)
+			expect(validator:Check(table3)).to.be.equal(true)
+			expect(validator:Check(0)).to.be.equal(false)
+
+			validator = Validator.IsTableStrict({
+				a = Validator.IsInteger(),
+			}):Freeze()
+
+			expect(validator:Check(nil)).to.be.equal(false)
+			expect(validator:Check({})).to.be.equal(false)
+			expect(validator:Check(table1)).to.be.equal(true)
+			expect(validator:Check(table2)).to.be.equal(true)
+			expect(validator:Check(table3)).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(false)
+
+			validator = Validator.IsNumber():Or():IsTable():Freeze()
+
+			expect(validator:Check(nil)).to.be.equal(false)
+			expect(validator:Check({})).to.be.equal(true)
+			expect(validator:Check(table1)).to.be.equal(true)
+			expect(validator:Check(table2)).to.be.equal(true)
+			expect(validator:Check(table3)).to.be.equal(true)
+			expect(validator:Check(0)).to.be.equal(true)
+
+			validator = Validator.IsNumber()
+				:Or()
+				:IsTableStrict({
+					a = Validator.IsInteger(),
+				})
+				:Freeze()
+
+			expect(validator:Check(nil)).to.be.equal(false)
+			expect(validator:Check({})).to.be.equal(false)
+			expect(validator:Check(table1)).to.be.equal(true)
+			expect(validator:Check(table2)).to.be.equal(true)
+			expect(validator:Check(table3)).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(true)
+		end)
 	end)
 end

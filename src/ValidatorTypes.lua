@@ -33,6 +33,8 @@ export type RootMethods = {
 	IsNan: (self: RootMethods) -> PublicNanValidator,
 	IsAnInstance: (self: RootMethods, instanceClass: string) -> PublicInstanceValidator,
 	IsAnInstanceStrict: (self: RootMethods, instanceClass: string) -> PublicInstanceValidator,
+	IsTable: (self: RootMethods, schema: { [any]: Checker }?) -> PublicTableValidator,
+	IsTableStrict: (self: RootMethods, schema: { [any]: Checker }?) -> PublicTableValidator,
 }
 export type PublicRootValidator = PublicValidator & RootMethods
 export type PrivateRootValidator = PublicRootValidator & PrivateValidator
@@ -87,6 +89,14 @@ export type PrivateNanValidator = PublicNanValidator & PrivateValidator
 export type InstanceValidatorMethods = {}
 export type PublicInstanceValidator = PublicValidator & InstanceValidatorMethods & {}
 export type PrivateInstanceValidator = PublicInstanceValidator & PrivateValidator
+
+--#endregion
+
+--#region Table
+
+export type TableValidatorMethods = {}
+export type PublicTableValidator = PublicValidator & TableValidatorMethods & {}
+export type PrivateTableValidator = PublicTableValidator & PrivateValidator
 
 --#endregion
 
