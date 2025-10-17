@@ -23,4 +23,43 @@ function StringValidator.IsString(
 	return new
 end
 
+function StringValidator.IsUTF8(
+	self: ValidatorTypes.PrivateStringValidator
+): ValidatorTypes.PrivateStringValidator
+	Helpers.AddCheck(self, StringChecks.IsUTF8)
+	return self
+end
+
+function StringValidator.MaxLen(
+	self: ValidatorTypes.PrivateStringValidator,
+	len: number
+): ValidatorTypes.PrivateStringValidator
+	Helpers.AddCheck(self, StringChecks.MaxLen, len)
+	return self
+end
+
+function StringValidator.MinLen(
+	self: ValidatorTypes.PrivateStringValidator,
+	len: number
+): ValidatorTypes.PrivateStringValidator
+	Helpers.AddCheck(self, StringChecks.MinLen, len)
+	return self
+end
+
+function StringValidator.MaxUTF8Len(
+	self: ValidatorTypes.PrivateStringValidator,
+	len: number
+): ValidatorTypes.PrivateStringValidator
+	Helpers.AddCheck(self, StringChecks.MaxUTF8Len, len)
+	return self
+end
+
+function StringValidator.MinUTF8Len(
+	self: ValidatorTypes.PrivateStringValidator,
+	len: number
+): ValidatorTypes.PrivateStringValidator
+	Helpers.AddCheck(self, StringChecks.MinUTF8Len, len)
+	return self
+end
+
 return StringValidator

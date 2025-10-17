@@ -69,6 +69,12 @@ export type PrivateNilValidator = PublicNilValidator & PrivateValidator
 --#region String
 
 export type StringValidatorMethods = {
+	IsUTF8: (self: StringValidatorMethods) -> PublicStringValidator,
+	MaxLen: (self: StringValidatorMethods, len: number) -> PublicStringValidator,
+	MinLen: (self: StringValidatorMethods, len: number) -> PublicStringValidator,
+	MaxUTF8Len: (self: StringValidatorMethods, len: number) -> PublicStringValidator,
+	MinUTF8Len: (self: StringValidatorMethods, len: number) -> PublicStringValidator,
+
 	IsInTable: (self: StringValidatorMethods, table: { [any]: any }) -> PublicStringValidator,
 	IsKeyOf: (self: StringValidatorMethods, table: { [any]: any }) -> PublicStringValidator,
 	IsEqual: (self: StringValidatorMethods, otherValue: any) -> PublicStringValidator,

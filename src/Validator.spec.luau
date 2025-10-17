@@ -36,12 +36,41 @@ return function()
 			expect(validator:Check(0)).to.be.equal(false)
 			expect(validator:Check("0")).to.be.equal(true)
 			expect(validator:Check(nil)).to.be.equal(false)
+			expect(validator:Check(string.pack("BBBB", 0xFF, 0xFE, 0x00, 0x80))).to.be.equal(true)
 
 			validator = Validator.IsNumber():Or():IsString():Freeze()
 
 			expect(validator:Check(0)).to.be.equal(true)
 			expect(validator:Check("0")).to.be.equal(true)
 			expect(validator:Check(nil)).to.be.equal(false)
+			expect(validator:Check(string.pack("BBBB", 0xFF, 0xFE, 0x00, 0x80))).to.be.equal(true)
+
+			validator = Validator.IsString():IsUTF8():Freeze()
+
+			expect(validator:Check(nil)).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(false)
+			expect(validator:Check("abcde")).to.be.equal(true)
+			expect(validator:Check(string.pack("BBBB", 0xFF, 0xFE, 0x00, 0x80))).to.be.equal(false)
+
+			validator = Validator.IsString():MinLen(5):MaxLen(10):Freeze()
+
+			expect(validator:Check(nil)).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(false)
+			expect(validator:Check("abcd")).to.be.equal(false)
+			expect(validator:Check("abcde")).to.be.equal(true)
+			expect(validator:Check("abcdeabcde")).to.be.equal(true)
+			expect(validator:Check("abcdeabcdef")).to.be.equal(false)
+			expect(validator:Check("абвгдеёжзи")).to.be.equal(false)
+
+			validator = Validator.IsString():MinUTF8Len(5):MaxUTF8Len(10):Freeze()
+
+			expect(validator:Check(nil)).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(false)
+			expect(validator:Check("abcd")).to.be.equal(false)
+			expect(validator:Check("abcde")).to.be.equal(true)
+			expect(validator:Check("abcdeabcde")).to.be.equal(true)
+			expect(validator:Check("abcdeabcdef")).to.be.equal(false)
+			expect(validator:Check("абвгдеёжзи")).to.be.equal(true)
 		end)
 
 		it("02. Test booleans", function()
