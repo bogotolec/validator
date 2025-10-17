@@ -43,4 +43,30 @@ function InstanceValidator.IsAnInstanceStrict(
 	return new
 end
 
+function InstanceValidator.IsProperty(
+	self: ValidatorTypes.PrivateInstanceValidator,
+	property: string,
+	checker: ValidatorTypes.Checker
+): ValidatorTypes.PrivateInstanceValidator
+	Helpers.AddCheck(self, InstanceChecks.IsProperty, property, checker)
+	return self
+end
+
+function InstanceValidator.IsAttribute(
+	self: ValidatorTypes.PrivateInstanceValidator,
+	attribute: string,
+	checker: ValidatorTypes.Checker
+): ValidatorTypes.PrivateInstanceValidator
+	Helpers.AddCheck(self, InstanceChecks.IsAttribute, attribute, checker)
+	return self
+end
+
+function InstanceValidator.HasTag(
+	self: ValidatorTypes.PrivateInstanceValidator,
+	tag: string
+): ValidatorTypes.PrivateInstanceValidator
+	Helpers.AddCheck(self, InstanceChecks.HasTag, tag)
+	return self
+end
+
 return InstanceValidator

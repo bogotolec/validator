@@ -231,8 +231,16 @@ return function()
 
 	describe("04. Instances", function()
 		local part = Instance.new("Part")
+		part.Transparency = 0.6
+		part:SetAttribute("test", "Hello")
+
 		local model = Instance.new("Model")
+		model:SetAttribute("test", 5)
+		model:AddTag("Test")
+
 		local decal = Instance.new("Decal")
+		decal.Transparency = 0.4
+		decal:SetAttribute("test", false)
 
 		it("00. Creates and combines IsAnInstance", function()
 			local validator = Validator.IsAnInstance("PVInstance"):Freeze()
@@ -259,6 +267,55 @@ return function()
 			expect(validator:Check(0)).to.be.equal(false)
 			expect(validator:Check(part)).to.be.equal(true)
 			expect(validator:Check(model)).to.be.equal(false)
+			expect(validator:Check(decal)).to.be.equal(false)
+		end)
+
+		it("02. Methods: IsProperty", function()
+			local validator = Validator.IsAnInstance("Object")
+				:IsProperty("Transparency", Validator.IsNumber():IsGreater(0.5))
+
+			expect(validator:Check(nil)).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(false)
+			expect(validator:Check(part)).to.be.equal(true)
+			expect(validator:Check(model)).to.be.equal(false)
+			expect(validator:Check(decal)).to.be.equal(false)
+
+			validator = Validator.IsAnInstance("Object")
+				:IsProperty("Transparency", Validator.IsNumber():IsGreater(0))
+
+			expect(validator:Check(nil)).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(false)
+			expect(validator:Check(part)).to.be.equal(true)
+			expect(validator:Check(model)).to.be.equal(false)
+			expect(validator:Check(decal)).to.be.equal(true)
+		end)
+
+		it("03. Methods: IsAttribute", function()
+			local validator = Validator.IsAnInstance("Object")
+				:IsAttribute("test", Validator.IsNumber():Or():IsBoolean())
+
+			expect(validator:Check(nil)).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(false)
+			expect(validator:Check(part)).to.be.equal(false)
+			expect(validator:Check(model)).to.be.equal(true)
+			expect(validator:Check(decal)).to.be.equal(true)
+
+			validator = Validator.IsAnInstance("Object"):IsAttribute("test", Validator.IsNumber())
+
+			expect(validator:Check(nil)).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(false)
+			expect(validator:Check(part)).to.be.equal(false)
+			expect(validator:Check(model)).to.be.equal(true)
+			expect(validator:Check(decal)).to.be.equal(false)
+		end)
+
+		it("04. Methods: HasTag", function()
+			local validator = Validator.IsAnInstance("Object"):HasTag("Test")
+
+			expect(validator:Check(nil)).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(false)
+			expect(validator:Check(part)).to.be.equal(false)
+			expect(validator:Check(model)).to.be.equal(true)
 			expect(validator:Check(decal)).to.be.equal(false)
 		end)
 	end)

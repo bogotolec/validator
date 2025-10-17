@@ -110,6 +110,18 @@ export type PrivateNanValidator = PublicNanValidator & PrivateValidator
 --#region Instance
 
 export type InstanceValidatorMethods = {
+	IsProperty: (
+		self: InstanceValidatorMethods,
+		property: string,
+		checker: Checker
+	) -> PublicInstanceValidator,
+	IsAttribute: (
+		self: InstanceValidatorMethods,
+		attribute: string,
+		checker: Checker
+	) -> PublicInstanceValidator,
+	HasTag: (self: InstanceValidatorMethods, tag: string) -> PublicInstanceValidator,
+
 	IsInTable: (self: InstanceValidatorMethods, table: { [any]: any }) -> PublicInstanceValidator,
 	IsKeyOf: (self: InstanceValidatorMethods, table: { [any]: any }) -> PublicInstanceValidator,
 	IsEqual: (self: InstanceValidatorMethods, otherValue: any) -> PublicInstanceValidator,
