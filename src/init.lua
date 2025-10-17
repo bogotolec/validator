@@ -9,6 +9,7 @@ local NilValidator = require(script.Nil)
 local NumberValidator = require(script.Number)
 local StringValidator = require(script.String)
 local TableValidator = require(script.Table)
+local TypeValidator = require(script.Type)
 
 local Validator = {}
 
@@ -24,5 +25,6 @@ Validator.IsAnInstance = InstanceValidator.newIsAnInstance
 Validator.IsAnInstanceStrict = InstanceValidator.newIsAnInstanceStrict
 Validator.IsTable = TableValidator.newIsTable
 Validator.IsTableStrict = TableValidator.newIsTableStrict
+Validator.IsTypeOf = TypeValidator.new
 
 return Validator

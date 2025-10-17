@@ -181,5 +181,23 @@ return function()
 			expect(validator:Check(table3)).to.be.equal(false)
 			expect(validator:Check(0)).to.be.equal(true)
 		end)
+
+		it("06. Test types", function()
+			local validator = Validator.IsTypeOf("Vector3"):Freeze()
+
+			expect(validator:Check(nil)).to.be.equal(false)
+			expect(validator:Check(Vector3.new(10, 20, 30))).to.be.equal(true)
+			expect(validator:Check(Vector3.zero)).to.be.equal(true)
+			expect(validator:Check(UDim2.new())).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(false)
+
+			validator = Validator.IsNumber():Or():IsTypeOf("Vector3"):Freeze()
+
+			expect(validator:Check(nil)).to.be.equal(false)
+			expect(validator:Check(Vector3.new(10, 20, 30))).to.be.equal(true)
+			expect(validator:Check(Vector3.zero)).to.be.equal(true)
+			expect(validator:Check(UDim2.new())).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(true)
+		end)
 	end)
 end

@@ -7,6 +7,7 @@ local NilValidator = require(script.Parent.Nil)
 local NumberValidator = require(script.Parent.Number)
 local StringValidator = require(script.Parent.String)
 local TableValidator = require(script.Parent.Table)
+local TypeValidator = require(script.Parent.Type)
 
 local RootValidator = {}
 RootValidator.__index = RootValidator
@@ -21,5 +22,6 @@ RootValidator.IsAnInstance = InstanceValidator.IsAnInstance
 RootValidator.IsAnInstanceStrict = InstanceValidator.IsAnInstanceStrict
 RootValidator.IsTable = TableValidator.IsTable
 RootValidator.IsTableStrict = TableValidator.IsTableStrict
+RootValidator.IsTypeOf = TypeValidator.IsTypeOf
 
 return RootValidator
