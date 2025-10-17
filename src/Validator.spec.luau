@@ -3,8 +3,15 @@
 local Validator = require(script.Parent)
 
 return function()
-	describe("Validator", function()
-		it("00. Check if it works", function()
+	describe("00. Core", function()
+		it("00. Creates, freezes and checks", function()
+			local validator = Validator.IsNumber():Freeze()
+
+			expect(validator:Check(0)).to.be.equal(true)
+			expect(validator:Check(nil)).to.be.equal(false)
+		end)
+
+		it("01. Combines complex expressions", function()
 			local validator =
 				Validator.IsInteger():IsGreater(5):Not():IsGreater(14):Or():IsNil():Freeze()
 
@@ -14,6 +21,11 @@ return function()
 			expect(validator:Check(15)).to.be.equal(false)
 			expect(validator:Check(nil)).to.be.equal(true)
 			expect(validator:Check("10")).to.be.equal(false)
+		end)
+
+		it("02. Asserts", function()
+			local validator =
+				Validator.IsInteger():IsGreater(5):Not():IsGreater(14):Or():IsNil():Freeze()
 
 			local success, value = pcall(function()
 				return validator:Assert(0, "Error")
@@ -30,29 +42,85 @@ return function()
 			expect(value).to.be.equal(10)
 		end)
 
-		it("01. Test strings", function()
+		it("03. Methods: IsEqual", function()
+			local validator = Validator.IsString():Not():IsEqual("aaa"):Freeze()
+
+			expect(validator:Check(1)).to.be.equal(false)
+			expect(validator:Check("1")).to.be.equal(true)
+			expect(validator:Check("aaa")).to.be.equal(false)
+			expect(validator:Check(nil)).to.be.equal(false)
+		end)
+
+		it("04. Methods: IsInTable", function()
+			local values = {
+				"aaa",
+				"bbb",
+				"ccc",
+			}
+
+			local validator = Validator.IsString():IsInTable(values):Freeze()
+
+			expect(validator:Check(1)).to.be.equal(false)
+			expect(validator:Check("1")).to.be.equal(false)
+			expect(validator:Check("aaa")).to.be.equal(true)
+			expect(validator:Check(nil)).to.be.equal(false)
+
+			validator = Validator.IsString():Not():IsInTable(values):Freeze()
+
+			expect(validator:Check(1)).to.be.equal(false)
+			expect(validator:Check("1")).to.be.equal(true)
+			expect(validator:Check("aaa")).to.be.equal(false)
+			expect(validator:Check(nil)).to.be.equal(false)
+		end)
+
+		it("05. Methods: IsKeyOf", function()
+			local values = {
+				"aaa",
+				"bbb",
+				"ccc",
+			}
+
+			local validator = Validator.IsInteger():IsKeyOf(values):Freeze()
+
+			expect(validator:Check(1)).to.be.equal(true)
+			expect(validator:Check(0)).to.be.equal(false)
+			expect(validator:Check(4)).to.be.equal(false)
+			expect(validator:Check("1")).to.be.equal(false)
+			expect(validator:Check("aaa")).to.be.equal(false)
+			expect(validator:Check(nil)).to.be.equal(false)
+		end)
+	end)
+
+	describe("01. Strings", function()
+		it("00. Creates", function()
 			local validator = Validator.IsString():Freeze()
 
 			expect(validator:Check(0)).to.be.equal(false)
 			expect(validator:Check("0")).to.be.equal(true)
 			expect(validator:Check(nil)).to.be.equal(false)
 			expect(validator:Check(string.pack("BBBB", 0xFF, 0xFE, 0x00, 0x80))).to.be.equal(true)
+		end)
 
-			validator = Validator.IsNumber():Or():IsString():Freeze()
+		it("01. Combines", function()
+			local validator = Validator.IsNumber():Or():IsString():Freeze()
 
 			expect(validator:Check(0)).to.be.equal(true)
 			expect(validator:Check("0")).to.be.equal(true)
 			expect(validator:Check(nil)).to.be.equal(false)
 			expect(validator:Check(string.pack("BBBB", 0xFF, 0xFE, 0x00, 0x80))).to.be.equal(true)
+		end)
 
-			validator = Validator.IsString():IsUTF8():Freeze()
+		it("02. Methods: IsUTF8", function()
+			local validator = Validator.IsString():IsUTF8():Freeze()
 
 			expect(validator:Check(nil)).to.be.equal(false)
 			expect(validator:Check(0)).to.be.equal(false)
 			expect(validator:Check("abcde")).to.be.equal(true)
 			expect(validator:Check(string.pack("BBBB", 0xFF, 0xFE, 0x00, 0x80))).to.be.equal(false)
+		end)
 
-			validator = Validator.IsString():MinLen(5):MaxLen(10):Freeze()
+		it("03. Methods: MinLen and MaxLen", function()
+			local validator = Validator.IsString():MinLen(5):MaxLen(10):Freeze()
 
 			expect(validator:Check(nil)).to.be.equal(false)
 			expect(validator:Check(0)).to.be.equal(false)
@@ -61,8 +129,10 @@ return function()
 			expect(validator:Check("abcdeabcde")).to.be.equal(true)
 			expect(validator:Check("abcdeabcdef")).to.be.equal(false)
 			expect(validator:Check("абвгдеёжзи")).to.be.equal(false)
+		end)
 
-			validator = Validator.IsString():MinUTF8Len(5):MaxUTF8Len(10):Freeze()
+		it("04. Methods: MinUTF8Len and MaxUTF8Len", function()
+			local validator = Validator.IsString():MinUTF8Len(5):MaxUTF8Len(10):Freeze()
 
 			expect(validator:Check(nil)).to.be.equal(false)
 			expect(validator:Check(0)).to.be.equal(false)
@@ -72,25 +142,63 @@ return function()
 			expect(validator:Check("abcdeabcdef")).to.be.equal(false)
 			expect(validator:Check("абвгдеёжзи")).to.be.equal(true)
 		end)
+	end)
 
-		it("02. Test booleans", function()
+	describe("02. Booleans", function()
+		it("00. Creates", function()
 			local validator = Validator.IsBoolean():Freeze()
 
 			expect(validator:Check(true)).to.be.equal(true)
 			expect(validator:Check(false)).to.be.equal(true)
 			expect(validator:Check(0)).to.be.equal(false)
 			expect(validator:Check(nil)).to.be.equal(false)
+		end)
 
-			validator = Validator.IsNumber():Or():IsBoolean():Freeze()
+		it("01. Combines", function()
+			local validator = Validator.IsNumber():Or():IsBoolean():Freeze()
 
 			expect(validator:Check(true)).to.be.equal(true)
 			expect(validator:Check(false)).to.be.equal(true)
 			expect(validator:Check(0)).to.be.equal(true)
 			expect(validator:Check(nil)).to.be.equal(false)
 		end)
+	end)
 
-		it("03. Test numbers and nans", function()
-			local nan = 0 / 0
+	describe("03. Numbers and NaNs", function()
+		local nan = 0 / 0
+		it("00. Creates and combines IsNumber", function()
+			local validator = Validator.IsNumber():Freeze()
+
+			expect(validator:Check(nan)).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(true)
+			expect(validator:Check(0.5)).to.be.equal(true)
+			expect(validator:Check("0")).to.be.equal(false)
+
+			validator = Validator.IsString():Or():IsNumber():Freeze()
+
+			expect(validator:Check(nan)).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(true)
+			expect(validator:Check(0.5)).to.be.equal(true)
+			expect(validator:Check("0")).to.be.equal(true)
+		end)
+
+		it("01. Creates and combines IsInteger", function()
+			local validator = Validator.IsInteger():Freeze()
+
+			expect(validator:Check(nan)).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(true)
+			expect(validator:Check(0.5)).to.be.equal(false)
+			expect(validator:Check("0")).to.be.equal(false)
+
+			validator = Validator.IsString():Or():IsInteger():Freeze()
+
+			expect(validator:Check(nan)).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(true)
+			expect(validator:Check(0.5)).to.be.equal(false)
+			expect(validator:Check("0")).to.be.equal(true)
+		end)
+
+		it("02. Creates and combines IsNan", function()
 			local validator = Validator.IsNan():Freeze()
 
 			expect(validator:Check(nan)).to.be.equal(true)
@@ -98,53 +206,76 @@ return function()
 			expect(validator:Check(0.5)).to.be.equal(false)
 			expect(validator:Check("0")).to.be.equal(false)
 
-			validator = Validator.IsNumber():Freeze()
-
-			expect(validator:Check(nan)).to.be.equal(false)
-			expect(validator:Check(0)).to.be.equal(true)
-			expect(validator:Check(0.5)).to.be.equal(true)
-			expect(validator:Check("0")).to.be.equal(false)
-
-			validator = Validator.IsInteger():Freeze()
-
-			expect(validator:Check(nan)).to.be.equal(false)
-			expect(validator:Check(0)).to.be.equal(true)
-			expect(validator:Check(0.5)).to.be.equal(false)
-			expect(validator:Check("0")).to.be.equal(false)
-
-			validator = Validator.IsNumber():Or():IsNan():Freeze()
+			validator = Validator.IsString():Or():IsNan():Freeze()
 
 			expect(validator:Check(nan)).to.be.equal(true)
-			expect(validator:Check(0)).to.be.equal(true)
-			expect(validator:Check(0.5)).to.be.equal(true)
+			expect(validator:Check(0)).to.be.equal(false)
+			expect(validator:Check(0.5)).to.be.equal(false)
+			expect(validator:Check("0")).to.be.equal(true)
+		end)
+
+		it("03. Methods: IsGreater", function()
+			local validator = Validator.IsNumber():IsGreater(5):Freeze()
+
+			expect(validator:Check(nan)).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(false)
+			expect(validator:Check(0.5)).to.be.equal(false)
+			expect(validator:Check(5)).to.be.equal(false)
+			expect(validator:Check(5.00001)).to.be.equal(true)
+			expect(validator:Check(6)).to.be.equal(true)
+			expect(validator:Check(-math.huge)).to.be.equal(false)
+			expect(validator:Check(math.huge)).to.be.equal(true)
 			expect(validator:Check("0")).to.be.equal(false)
 		end)
+	end)
 
-		it("04. Test instances", function()
-			local part = Instance.new("Part")
-			part.Parent = workspace
+	describe("04. Instances", function()
+		local part = Instance.new("Part")
+		local model = Instance.new("Model")
+		local decal = Instance.new("Decal")
 
-			local validator = Validator.IsAnInstance("BasePart"):Freeze()
-			local validatorStrict = Validator.IsAnInstanceStrict("BasePart"):Freeze()
+		it("00. Creates and combines IsAnInstance", function()
+			local validator = Validator.IsAnInstance("PVInstance"):Freeze()
 
+			expect(validator:Check(nil)).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(false)
 			expect(validator:Check(part)).to.be.equal(true)
-			expect(validatorStrict:Check(part)).to.be.equal(false)
-
-			part:Destroy()
+			expect(validator:Check(model)).to.be.equal(true)
+			expect(validator:Check(decal)).to.be.equal(false)
 		end)
 
-		it("05. Test tables", function()
-			local table1 = {
-				a = 10,
-			}
-			local table2 = {
-				a = 20,
-			}
-			local table3 = {
-				a = 10,
-				b = 20,
-			}
+		it("01. Creates and combines IsAnInstanceStrict", function()
+			local validator = Validator.IsAnInstanceStrict("PVInstance"):Freeze()
 
+			expect(validator:Check(nil)).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(false)
+			expect(validator:Check(part)).to.be.equal(false)
+			expect(validator:Check(model)).to.be.equal(false)
+			expect(validator:Check(decal)).to.be.equal(false)
+
+			validator = Validator.IsAnInstanceStrict("Part"):Freeze()
+
+			expect(validator:Check(nil)).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(false)
+			expect(validator:Check(part)).to.be.equal(true)
+			expect(validator:Check(model)).to.be.equal(false)
+			expect(validator:Check(decal)).to.be.equal(false)
+		end)
+	end)
+
+	describe("05. Tables", function()
+		local table1 = {
+			a = 10,
+		}
+		local table2 = {
+			a = 20,
+		}
+		local table3 = {
+			a = 10,
+			b = 20,
+		}
+
+		it("00. Creates and combines", function()
 			local validator = Validator.IsTable():Freeze()
 
 			expect(validator:Check(nil)).to.be.equal(false)
@@ -152,39 +283,6 @@ return function()
 			expect(validator:Check(table1)).to.be.equal(true)
 			expect(validator:Check(table2)).to.be.equal(true)
 			expect(validator:Check(table3)).to.be.equal(true)
-			expect(validator:Check(0)).to.be.equal(false)
-
-			validator = Validator.IsTable({
-				a = Validator.IsInteger():IsGreater(15),
-			}):Freeze()
-
-			expect(validator:Check(nil)).to.be.equal(false)
-			expect(validator:Check({})).to.be.equal(false)
-			expect(validator:Check(table1)).to.be.equal(false)
-			expect(validator:Check(table2)).to.be.equal(true)
-			expect(validator:Check(table3)).to.be.equal(false)
-			expect(validator:Check(0)).to.be.equal(false)
-
-			validator = Validator.IsTable({
-				a = Validator.IsInteger(),
-			}):Freeze()
-
-			expect(validator:Check(nil)).to.be.equal(false)
-			expect(validator:Check({})).to.be.equal(false)
-			expect(validator:Check(table1)).to.be.equal(true)
-			expect(validator:Check(table2)).to.be.equal(true)
-			expect(validator:Check(table3)).to.be.equal(true)
-			expect(validator:Check(0)).to.be.equal(false)
-
-			validator = Validator.IsTableStrict({
-				a = Validator.IsInteger(),
-			}):Freeze()
-
-			expect(validator:Check(nil)).to.be.equal(false)
-			expect(validator:Check({})).to.be.equal(false)
-			expect(validator:Check(table1)).to.be.equal(true)
-			expect(validator:Check(table2)).to.be.equal(true)
-			expect(validator:Check(table3)).to.be.equal(false)
 			expect(validator:Check(0)).to.be.equal(false)
 
 			validator = Validator.IsNumber():Or():IsTable():Freeze()
@@ -195,6 +293,46 @@ return function()
 			expect(validator:Check(table2)).to.be.equal(true)
 			expect(validator:Check(table3)).to.be.equal(true)
 			expect(validator:Check(0)).to.be.equal(true)
+		end)
+
+		it("01. Creates and combines with schema", function()
+			local validator = Validator.IsTable({
+				a = Validator.IsInteger():IsGreater(15),
+			}):Freeze()
+
+			expect(validator:Check(nil)).to.be.equal(false)
+			expect(validator:Check({})).to.be.equal(false)
+			expect(validator:Check(table1)).to.be.equal(false)
+			expect(validator:Check(table2)).to.be.equal(true)
+			expect(validator:Check(table3)).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(false)
+
+			validator = Validator.IsNumber()
+				:Or()
+				:IsTable({
+					a = Validator.IsInteger():IsGreater(15),
+				})
+				:Freeze()
+
+			expect(validator:Check(nil)).to.be.equal(false)
+			expect(validator:Check({})).to.be.equal(false)
+			expect(validator:Check(table1)).to.be.equal(false)
+			expect(validator:Check(table2)).to.be.equal(true)
+			expect(validator:Check(table3)).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(true)
+		end)
+
+		it("02. Creates and combines with schema strict", function()
+			local validator = Validator.IsTableStrict({
+				a = Validator.IsInteger(),
+			}):Freeze()
+
+			expect(validator:Check(nil)).to.be.equal(false)
+			expect(validator:Check({})).to.be.equal(false)
+			expect(validator:Check(table1)).to.be.equal(true)
+			expect(validator:Check(table2)).to.be.equal(true)
+			expect(validator:Check(table3)).to.be.equal(false)
+			expect(validator:Check(0)).to.be.equal(false)
 
 			validator = Validator.IsNumber()
 				:Or()
@@ -210,8 +348,10 @@ return function()
 			expect(validator:Check(table3)).to.be.equal(false)
 			expect(validator:Check(0)).to.be.equal(true)
 		end)
+	end)
 
-		it("06. Test types", function()
+	describe("06. Types", function()
+		it("00. Creates and combines", function()
 			local validator = Validator.IsTypeOf("Vector3"):Freeze()
 
 			expect(validator:Check(nil)).to.be.equal(false)
@@ -228,8 +368,10 @@ return function()
 			expect(validator:Check(UDim2.new())).to.be.equal(false)
 			expect(validator:Check(0)).to.be.equal(true)
 		end)
+	end)
 
-		it("07. Test enums", function()
+	describe("07. Enums", function()
+		it("00. Creates and combines", function()
 			local validator = Validator.IsEnumItem():Freeze()
 
 			expect(validator:Check(1)).to.be.equal(false)
@@ -237,19 +379,21 @@ return function()
 			expect(validator:Check(Enum.KeyCode.A)).to.be.equal(true)
 			expect(validator:Check(Enum.PartType.Ball)).to.be.equal(true)
 
-			validator = Validator.IsEnumItem(Enum.KeyCode):Freeze()
-
-			expect(validator:Check(1)).to.be.equal(false)
-			expect(validator:Check("1")).to.be.equal(false)
-			expect(validator:Check(Enum.KeyCode.A)).to.be.equal(true)
-			expect(validator:Check(Enum.PartType.Ball)).to.be.equal(false)
-
 			validator = Validator.IsNumber():Or():IsEnumItem():Freeze()
 
 			expect(validator:Check(1)).to.be.equal(true)
 			expect(validator:Check("1")).to.be.equal(false)
 			expect(validator:Check(Enum.KeyCode.A)).to.be.equal(true)
 			expect(validator:Check(Enum.PartType.Ball)).to.be.equal(true)
+		end)
+
+		it("01. Creates and combines with given Enum", function()
+			local validator = Validator.IsEnumItem(Enum.KeyCode):Freeze()
+
+			expect(validator:Check(1)).to.be.equal(false)
+			expect(validator:Check("1")).to.be.equal(false)
+			expect(validator:Check(Enum.KeyCode.A)).to.be.equal(true)
+			expect(validator:Check(Enum.PartType.Ball)).to.be.equal(false)
 
 			validator = Validator.IsNumber():Or():IsEnumItem(Enum.KeyCode):Freeze()
 
@@ -257,44 +401,6 @@ return function()
 			expect(validator:Check("1")).to.be.equal(false)
 			expect(validator:Check(Enum.KeyCode.A)).to.be.equal(true)
 			expect(validator:Check(Enum.PartType.Ball)).to.be.equal(false)
-		end)
-
-		it("08. Test core methods.", function()
-			local validator = Validator.IsString():Not():IsEqual("aaa"):Freeze()
-
-			expect(validator:Check(1)).to.be.equal(false)
-			expect(validator:Check("1")).to.be.equal(true)
-			expect(validator:Check("aaa")).to.be.equal(false)
-			expect(validator:Check(nil)).to.be.equal(false)
-
-			local values = {
-				"aaa",
-				"bbb",
-				"ccc",
-			}
-
-			validator = Validator.IsString():IsInTable(values):Freeze()
-
-			expect(validator:Check(1)).to.be.equal(false)
-			expect(validator:Check("1")).to.be.equal(false)
-			expect(validator:Check("aaa")).to.be.equal(true)
-			expect(validator:Check(nil)).to.be.equal(false)
-
-			validator = Validator.IsString():Not():IsInTable(values):Freeze()
-
-			expect(validator:Check(1)).to.be.equal(false)
-			expect(validator:Check("1")).to.be.equal(true)
-			expect(validator:Check("aaa")).to.be.equal(false)
-			expect(validator:Check(nil)).to.be.equal(false)
-
-			validator = Validator.IsInteger():IsKeyOf(values):Freeze()
-
-			expect(validator:Check(1)).to.be.equal(true)
-			expect(validator:Check(0)).to.be.equal(false)
-			expect(validator:Check(4)).to.be.equal(false)
-			expect(validator:Check("1")).to.be.equal(false)
-			expect(validator:Check("aaa")).to.be.equal(false)
-			expect(validator:Check(nil)).to.be.equal(false)
 		end)
 	end)
 end
