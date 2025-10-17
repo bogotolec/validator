@@ -36,6 +36,7 @@ export type RootMethods = {
 	IsTable: (self: RootMethods, schema: { [any]: Checker }?) -> PublicTableValidator,
 	IsTableStrict: (self: RootMethods, schema: { [any]: Checker }?) -> PublicTableValidator,
 	IsTypeOf: (self: RootMethods, type: string) -> PublicTypeValidator,
+	IsEnumItem: (self: RootMethods, enum: Enum?) -> PublicEnumValidator,
 }
 export type PublicRootValidator = PublicValidator & RootMethods
 export type PrivateRootValidator = PublicRootValidator & PrivateValidator
@@ -106,6 +107,14 @@ export type PrivateTableValidator = PublicTableValidator & PrivateValidator
 export type TypeValidatorMethods = {}
 export type PublicTypeValidator = PublicValidator & TypeValidatorMethods & {}
 export type PrivateTypeValidator = PublicTypeValidator & PrivateValidator
+
+--#endregion
+
+--#region Enum
+
+export type EnumValidatorMethods = {}
+export type PublicEnumValidator = PublicValidator & EnumValidatorMethods & {}
+export type PrivateEnumValidator = PublicEnumValidator & PrivateValidator
 
 --#endregion
 

@@ -199,5 +199,35 @@ return function()
 			expect(validator:Check(UDim2.new())).to.be.equal(false)
 			expect(validator:Check(0)).to.be.equal(true)
 		end)
+
+		it("07. Test enums", function()
+			local validator = Validator.IsEnumItem():Freeze()
+
+			expect(validator:Check(1)).to.be.equal(false)
+			expect(validator:Check("1")).to.be.equal(false)
+			expect(validator:Check(Enum.KeyCode.A)).to.be.equal(true)
+			expect(validator:Check(Enum.PartType.Ball)).to.be.equal(true)
+
+			validator = Validator.IsEnumItem(Enum.KeyCode):Freeze()
+
+			expect(validator:Check(1)).to.be.equal(false)
+			expect(validator:Check("1")).to.be.equal(false)
+			expect(validator:Check(Enum.KeyCode.A)).to.be.equal(true)
+			expect(validator:Check(Enum.PartType.Ball)).to.be.equal(false)
+
+			validator = Validator.IsNumber():Or():IsEnumItem():Freeze()
+
+			expect(validator:Check(1)).to.be.equal(true)
+			expect(validator:Check("1")).to.be.equal(false)
+			expect(validator:Check(Enum.KeyCode.A)).to.be.equal(true)
+			expect(validator:Check(Enum.PartType.Ball)).to.be.equal(true)
+
+			validator = Validator.IsNumber():Or():IsEnumItem(Enum.KeyCode):Freeze()
+
+			expect(validator:Check(1)).to.be.equal(true)
+			expect(validator:Check("1")).to.be.equal(false)
+			expect(validator:Check(Enum.KeyCode.A)).to.be.equal(true)
+			expect(validator:Check(Enum.PartType.Ball)).to.be.equal(false)
+		end)
 	end)
 end

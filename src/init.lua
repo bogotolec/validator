@@ -2,6 +2,7 @@
 
 local BooleanValidator = require(script.Boolean)
 local CoreValidator = require(script.Core)
+local EnumValidator = require(script.Enum)
 local InstanceValidator = require(script.Instance)
 local NanValidator = require(script.Nan)
 local RootValidator = require(script.Root)
@@ -26,5 +27,6 @@ Validator.IsAnInstanceStrict = InstanceValidator.newIsAnInstanceStrict
 Validator.IsTable = TableValidator.newIsTable
 Validator.IsTableStrict = TableValidator.newIsTableStrict
 Validator.IsTypeOf = TypeValidator.new
+Validator.IsEnumItem = EnumValidator.new
 
 return Validator

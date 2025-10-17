@@ -1,6 +1,7 @@
 --!strict
 
 local BooleanValidator = require(script.Parent.Boolean)
+local EnumValidator = require(script.Parent.Enum)
 local InstanceValidator = require(script.Parent.Instance)
 local NanValidator = require(script.Parent.Nan)
 local NilValidator = require(script.Parent.Nil)
@@ -23,5 +24,6 @@ RootValidator.IsAnInstanceStrict = InstanceValidator.IsAnInstanceStrict
 RootValidator.IsTable = TableValidator.IsTable
 RootValidator.IsTableStrict = TableValidator.IsTableStrict
 RootValidator.IsTypeOf = TypeValidator.IsTypeOf
+RootValidator.IsEnumItem = EnumValidator.IsEnumItem
 
 return RootValidator
