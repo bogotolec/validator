@@ -1,5 +1,7 @@
 --!strict
 
+local CoreChecks = require(script.CoreChecks)
+local Helpers = require(script.Parent.Helpers)
 local ValidatorTypes = require(script.Parent.ValidatorTypes)
 
 local CoreValidator = {}
@@ -75,6 +77,30 @@ end
 
 function CoreValidator.Not(self: ValidatorTypes.PrivateValidator): ValidatorTypes.PrivateValidator
 	table.insert(self._checksGroups[#self._checksGroups], false)
+	return self
+end
+
+function CoreValidator.IsInTable(
+	self: ValidatorTypes.PrivateValidator,
+	t: { [any]: any }
+): ValidatorTypes.PrivateValidator
+	Helpers.AddCheck(self, CoreChecks.IsInTable, t)
+	return self
+end
+
+function CoreValidator.IsKeyOf(
+	self: ValidatorTypes.PrivateValidator,
+	t: { [any]: any }
+): ValidatorTypes.PrivateValidator
+	Helpers.AddCheck(self, CoreChecks.IsKeyOf, t)
+	return self
+end
+
+function CoreValidator.IsEqual(
+	self: ValidatorTypes.PrivateValidator,
+	otherValue: any
+): ValidatorTypes.PrivateValidator
+	Helpers.AddCheck(self, CoreChecks.IsEqual, otherValue)
 	return self
 end
 

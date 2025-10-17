@@ -229,5 +229,43 @@ return function()
 			expect(validator:Check(Enum.KeyCode.A)).to.be.equal(true)
 			expect(validator:Check(Enum.PartType.Ball)).to.be.equal(false)
 		end)
+
+		it("08. Test core methods.", function()
+			local validator = Validator.IsString():Not():IsEqual("aaa"):Freeze()
+
+			expect(validator:Check(1)).to.be.equal(false)
+			expect(validator:Check("1")).to.be.equal(true)
+			expect(validator:Check("aaa")).to.be.equal(false)
+			expect(validator:Check(nil)).to.be.equal(false)
+
+			local values = {
+				"aaa",
+				"bbb",
+				"ccc",
+			}
+
+			validator = Validator.IsString():IsInTable(values):Freeze()
+
+			expect(validator:Check(1)).to.be.equal(false)
+			expect(validator:Check("1")).to.be.equal(false)
+			expect(validator:Check("aaa")).to.be.equal(true)
+			expect(validator:Check(nil)).to.be.equal(false)
+
+			validator = Validator.IsString():Not():IsInTable(values):Freeze()
+
+			expect(validator:Check(1)).to.be.equal(false)
+			expect(validator:Check("1")).to.be.equal(true)
+			expect(validator:Check("aaa")).to.be.equal(false)
+			expect(validator:Check(nil)).to.be.equal(false)
+
+			validator = Validator.IsInteger():IsKeyOf(values):Freeze()
+
+			expect(validator:Check(1)).to.be.equal(true)
+			expect(validator:Check(0)).to.be.equal(false)
+			expect(validator:Check(4)).to.be.equal(false)
+			expect(validator:Check("1")).to.be.equal(false)
+			expect(validator:Check("aaa")).to.be.equal(false)
+			expect(validator:Check(nil)).to.be.equal(false)
+		end)
 	end)
 end

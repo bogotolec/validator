@@ -47,6 +47,10 @@ export type PrivateRootValidator = PublicRootValidator & PrivateValidator
 
 export type NumberValidatorMethods = {
 	IsGreater: (self: NumberValidatorMethods, than: number) -> PublicNumberValidator,
+
+	IsInTable: (self: NumberValidatorMethods, table: { [any]: any }) -> PublicNumberValidator,
+	IsKeyOf: (self: NumberValidatorMethods, table: { [any]: any }) -> PublicNumberValidator,
+	IsEqual: (self: NumberValidatorMethods, otherValue: any) -> PublicNumberValidator,
 }
 export type PublicNumberValidator = PublicValidator & NumberValidatorMethods & {
 	Not: (self: PublicValidator) -> NumberValidatorMethods,
@@ -64,7 +68,11 @@ export type PrivateNilValidator = PublicNilValidator & PrivateValidator
 
 --#region String
 
-export type StringValidatorMethods = {}
+export type StringValidatorMethods = {
+	IsInTable: (self: StringValidatorMethods, table: { [any]: any }) -> PublicStringValidator,
+	IsKeyOf: (self: StringValidatorMethods, table: { [any]: any }) -> PublicStringValidator,
+	IsEqual: (self: StringValidatorMethods, otherValue: any) -> PublicStringValidator,
+}
 export type PublicStringValidator = PublicValidator & StringValidatorMethods & {
 	Not: (self: PublicValidator) -> StringValidatorMethods,
 }
@@ -74,12 +82,19 @@ export type PrivateStringValidator = PublicStringValidator & PrivateValidator
 
 --#region Boolean
 
-export type PublicBooleanValidator = PublicValidator & {}
+export type BooleanValidatorMethods = {
+	IsInTable: (self: BooleanValidatorMethods, table: { [any]: any }) -> PublicBooleanValidator,
+	IsKeyOf: (self: BooleanValidatorMethods, table: { [any]: any }) -> PublicBooleanValidator,
+	IsEqual: (self: BooleanValidatorMethods, otherValue: any) -> PublicBooleanValidator,
+}
+export type PublicBooleanValidator = PublicValidator & {
+	Not: (self: PublicValidator) -> BooleanValidatorMethods,
+}
 export type PrivateBooleanValidator = PublicBooleanValidator & PrivateValidator
 
 --#endregion
 
---#region Boolean
+--#region Nan
 
 export type PublicNanValidator = PublicValidator & {}
 export type PrivateNanValidator = PublicNanValidator & PrivateValidator
@@ -88,32 +103,56 @@ export type PrivateNanValidator = PublicNanValidator & PrivateValidator
 
 --#region Instance
 
-export type InstanceValidatorMethods = {}
-export type PublicInstanceValidator = PublicValidator & InstanceValidatorMethods & {}
+export type InstanceValidatorMethods = {
+	IsInTable: (self: InstanceValidatorMethods, table: { [any]: any }) -> PublicInstanceValidator,
+	IsKeyOf: (self: InstanceValidatorMethods, table: { [any]: any }) -> PublicInstanceValidator,
+	IsEqual: (self: InstanceValidatorMethods, otherValue: any) -> PublicInstanceValidator,
+}
+export type PublicInstanceValidator = PublicValidator & InstanceValidatorMethods & {
+	Not: (self: PublicValidator) -> InstanceValidatorMethods,
+}
 export type PrivateInstanceValidator = PublicInstanceValidator & PrivateValidator
 
 --#endregion
 
 --#region Table
 
-export type TableValidatorMethods = {}
-export type PublicTableValidator = PublicValidator & TableValidatorMethods & {}
+export type TableValidatorMethods = {
+	IsInTable: (self: TableValidatorMethods, table: { [any]: any }) -> PublicTableValidator,
+	IsKeyOf: (self: TableValidatorMethods, table: { [any]: any }) -> PublicTableValidator,
+	IsEqual: (self: TableValidatorMethods, otherValue: any) -> PublicTableValidator,
+}
+export type PublicTableValidator = PublicValidator & TableValidatorMethods & {
+	Not: (self: PublicValidator) -> TableValidatorMethods,
+}
 export type PrivateTableValidator = PublicTableValidator & PrivateValidator
 
 --#endregion
 
 --#region Type
 
-export type TypeValidatorMethods = {}
-export type PublicTypeValidator = PublicValidator & TypeValidatorMethods & {}
+export type TypeValidatorMethods = {
+	IsInTable: (self: TypeValidatorMethods, table: { [any]: any }) -> PublicTypeValidator,
+	IsKeyOf: (self: TypeValidatorMethods, table: { [any]: any }) -> PublicTypeValidator,
+	IsEqual: (self: TypeValidatorMethods, otherValue: any) -> PublicTypeValidator,
+}
+export type PublicTypeValidator = PublicValidator & TypeValidatorMethods & {
+	Not: (self: PublicValidator) -> TypeValidatorMethods,
+}
 export type PrivateTypeValidator = PublicTypeValidator & PrivateValidator
 
 --#endregion
 
 --#region Enum
 
-export type EnumValidatorMethods = {}
-export type PublicEnumValidator = PublicValidator & EnumValidatorMethods & {}
+export type EnumValidatorMethods = {
+	IsInTable: (self: EnumValidatorMethods, table: { [any]: any }) -> PublicEnumValidator,
+	IsKeyOf: (self: EnumValidatorMethods, table: { [any]: any }) -> PublicEnumValidator,
+	IsEqual: (self: EnumValidatorMethods, otherValue: any) -> PublicEnumValidator,
+}
+export type PublicEnumValidator = PublicValidator & EnumValidatorMethods & {
+	Not: (self: PublicValidator) -> EnumValidatorMethods,
+}
 export type PrivateEnumValidator = PublicEnumValidator & PrivateValidator
 
 --#endregion
