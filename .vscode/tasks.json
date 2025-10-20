@@ -16,7 +16,7 @@
         {
             "label": "Build Validator.rbxm",
             "type": "shell",
-            "command": "rojo build default.project.json -o Validator.rbxm",
+            "command": "rojo build build.project.json -o Validator.rbxm",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
