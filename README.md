@@ -18,7 +18,7 @@
 
 ## Installation
 
-### Using wally
+### Using Wally
 
 Validator can be added as a dependency in [Wally](https://wally.run/) project:
 
@@ -43,17 +43,17 @@ Create a simple validator and use it to validate values:
 local Validator = require("Validator")
 
 -- Create a validator for numbers
-local number = Validator.IsInteger():Freeze()
+local numberValidator = Validator.IsInteger():Freeze()
 
 -- Use Check() to test values
-print(number:Check(5)) -- true
-print(number:Check(0.5)) -- true
-print(number:Check("hello")) -- false
+print(numberValidator:Check(5)) -- true
+print(numberValidator:Check(0.5)) -- false
+print(numberValidator:Check("hello")) -- false
 
 -- Use Assert() to throw errors for invalid values
-number:Assert(5) -- passes
-number:Assert(0.5) -- throws error: `Value {value} does not satisfy the validator checks.`
-number:Assert(0.5, "Number must be integer") -- throws error: "Number must be integer"
+numberValidator:Assert(5) -- passes
+numberValidator:Assert(0.5) -- throws error: "Value 0.5 does not satisfy the validator checks."
+numberValidator:Assert(0.5, "Number must be integer") -- throws error: "Number must be integer"
 ```
 
 ### Complex Validation Chain
@@ -97,7 +97,7 @@ print(numberOrString:Check(true)) -- false
 
 ### Using NOT Logic
 
-Negate validation rules using Not():
+Negate the single next validation rule using :Not():
 
 ```lua
 local Validator = require("Validator")
@@ -105,9 +105,9 @@ local Validator = require("Validator")
 -- Create a validator for numbers between 0 and 100
 local numberInRange = Validator
     .IsNumber()
-    :IsGreater(0)    -- must be > 0
     :Not()
     :IsGreater(100)  -- must NOT be > 100
+    :IsGreater(0)    -- must be > 0
     :Freeze()
 
 print(numberInRange:Check(0)) -- false (not > 0)
@@ -158,7 +158,7 @@ print(personValidator:Check(invalidPerson)) -- false
 These methods could be used anytime, both before and after freezing.
 
 - `:Check(data: any) -> boolean` - Returns true if the data matches all validation rules.
-- `:Assert(data: any, message?: string) -> any` - Throws an error with optional message if validation fails, otherwise returns the data.
+- `:Assert(data: any, message?: string) -> any` - Throws an error with an optional message if validation fails; otherwise, returns the data.
 
 #### Chain Building Methods
 
@@ -178,37 +178,37 @@ Available on most validator types before freezing:
 
 ### Number Validation
 
-By default, all number validators checks that given value is not NaN.
+By default, all number validators check that given the value is not NaN.
 
-- `:IsNumber()` - Validates that value is a number.
-- `:IsInteger()` - Validates that value is an integer.
+- `:IsNumber()` - Validates that the value is a number.
+- `:IsInteger()` - Validates that the value is an integer.
 
-After above methods, below methods can be used until the next `:Or`:
+After the above methods, the below methods can be used until the next `:Or`:
 
 - `:IsGreater(than: number)` - Checks if number is greater than given value.
 
-### Nan Validation
+### NaN Validation
 
-- `IsNan() -> NanValidator` - Validates that value is NaN.
+- `:IsNan()` - Validates that the value is NaN.
 
 ### String Validation
 
-- `IsString()` - Validates that value is a string.
+- `:IsString()` - Validates that value is a string.
 
-After above methods, below methods can be used until the next `:Or`:
+After the above methods, the below methods can be used until the next `:Or`:
 
-- `IsUTF8()` - Validates that string is valid UTF-8
-- `MaxLen(len: number)` - Sets maximum string length in bytes.
-- `MinLen(len: number)` - Sets minimum string length in bytes.
-- `MaxUTF8Len(len: number)` - Sets maximum length in UTF-8 characters.
-- `MinUTF8Len(len: number)` - Sets minimum length in UTF-8 characters.
+- `:IsUTF8()` - Validates that string is valid UTF-8
+- `:MaxLen(len: number)` - Sets maximum string length in bytes.
+- `:MinLen(len: number)` - Sets minimum string length in bytes.
+- `:MaxUTF8Len(len: number)` - Sets maximum length in UTF-8 characters.
+- `:MinUTF8Len(len: number)` - Sets minimum length in UTF-8 characters.
 
 ### Instance Validation
 
-- `IsAnInstance(instanceClass: string)` - Validates that value is an Instance of given class.
-- `IsAnInstanceStrict(instanceClass: string)` - Validates that value is exactly the given class (no inheritance).
+- `:IsAnInstance(instanceClass: string)` - Validates that the value is an Instance of the given class.
+- `:IsAnInstanceStrict(instanceClass: string)` - Validates that the value is exactly the given class (no inheritance).
 
-After above methods, below methods can be used until the next `:Or`:
+After the above methods, the below methods can be used until the next `:Or`:
 
 - `IsProperty(property: string, validator: Validator)` - Validates an instance property.
 - `IsAttribute(attribute: string, validator: Validator)` - Validates an instance attribute.
@@ -217,17 +217,17 @@ After above methods, below methods can be used until the next `:Or`:
 ### Table Validation
 
 - `:IsTable(schema?: {[any]: Validator})` - Validates tables with optional schema.
-- `:IsTableStrict(schema?: {[any]: Validator})` - Validates tables with optional schema, but will trigger negatively if there are extra keys, which are not present in provided schema.
+- `:IsTableStrict(schema?: {[any]: Validator})` - Validates tables with optional schema but will trigger negatively if there are extra keys that are not present in the provided schema.
 
-In both methods schema represents a table with any keys and Validator values, so in given data all the values will be checked with Validator of such key.
+In both methods, a schema represents a table with any keys and Validator values, so in given data all the values will be checked with Validator of such a key.
 
 ### Boolean validation
 
-- `:IsBoolean()` - Validates that value is a boolean.
+- `:IsBoolean()` - Validates that the value is a boolean.
 
 ### Enum validation
 
-- `:IsEnumItem(enum?: Enum)` - Validates that value is an EnumItem. You can specify if a value is EnumItem of specific Enum.
+- `:IsEnumItem(enum?: Enum)` - Validates that the value is an EnumItem. You can specify if a value is EnumItem of specific Enum.
 
 ### Simple Type Validation
 
