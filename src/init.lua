@@ -1,5 +1,21 @@
 --!strict
 
+local ValidatorTypes = require(script.ValidatorTypes)
+
+export type Check = ValidatorTypes.Check
+export type Checker = ValidatorTypes.Checker
+export type Validator = ValidatorTypes.PublicValidator
+export type RootValidator = ValidatorTypes.PublicRootValidator
+export type NumberValidator = ValidatorTypes.PublicNumberValidator
+export type NilValidator = ValidatorTypes.PublicNilValidator
+export type StringValidator = ValidatorTypes.PublicNilValidator
+export type BooleanValidator = ValidatorTypes.PublicBooleanValidator
+export type NanValidator = ValidatorTypes.PublicNanValidator
+export type InstanceValidator = ValidatorTypes.PublicInstanceValidator
+export type TableValidator = ValidatorTypes.PublicTableValidator
+export type TypeValidator = ValidatorTypes.PublicTypeValidator
+export type EnumValidator = ValidatorTypes.PublicEnumValidator
+
 local BooleanValidator = require(script.Boolean)
 local CoreValidator = require(script.Core)
 local EnumValidator = require(script.Enum)
