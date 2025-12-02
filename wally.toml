@@ -2,7 +2,7 @@
 name = "bogotolec/validator"
 license = "MIT"
 authors = ["bogotolec"]
-version = "0.1.0"
+version = "0.1.1"
 
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
